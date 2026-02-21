@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quiz Management</title>
+    <style>
+        body{
+            font-family: Arial;
+            background:#f4f6f9;
+            margin:0;
+        }
+
+        .navbar{
+            background:#1d3557;
+            padding:15px;
+            color:white;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+
+        .navbar a{
+            color:white;
+            text-decoration:none;
+            margin-left:20px;
+            font-weight:bold;
+        }
+
+        .container{
+            padding:40px;
+        }
+
+        .card{
+            background:white;
+            padding:25px;
+            margin-bottom:30px;
+            border-radius:10px;
+            box-shadow:0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        input{
+            width:100%;
+            padding:8px;
+            margin:8px 0;
+            border:1px solid #ccc;
+            border-radius:5px;
+        }
+
+        button{
+            padding:10px 20px;
+            background:#1d3557;
+            color:white;
+            border:none;
+            border-radius:5px;
+            cursor:pointer;
+        }
+
+        button:hover{
+            background:#457b9d;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            margin-top:15px;
+        }
+
+        table, th, td{
+            border:1px solid #ccc;
+        }
+
+        th, td{
+            padding:10px;
+            text-align:center;
+        }
+
+        th{
+            background:#1d3557;
+            color:white;
+        }
+
+        .btn{
+            padding:5px 10px;
+            border-radius:5px;
+            text-decoration:none;
+            font-weight:bold;
+            font-size:14px;
+        }
+
+        .manage{
+            background:#1d3557;
+            color:white;
+        }
+
+        .edit{
+            background:#ffb703;
+            color:black;
+        }
+
+        .delete{
+            background:#e63946;
+            color:white;
+            cursor:pointer;
+        }
+
+        .btn:hover{
+            opacity:0.8;
+        }
+
+        .empty{
+            color:gray;
+            font-style:italic;
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <div>
+        Category : {{ category.name }}
+    </div>
+
+    <div>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/category">Category</a>
+        <a href="/logout">Logout</a>
+    </div>
+</div>
+
+<div class="container">
+
+    <!-- Create Quiz -->
+    <div class="card">
+        <h3>Create New Quiz</h3>
+
+        <form method="post">
+            <input type="text" 
+                   name="title" 
+                   placeholder="Quiz Title" 
+                   required>
+
+            <input type="number" 
+                   name="total_time" 
+                   placeholder="Total Time (Minutes)" 
+                   required>
+
+            <button type="submit">Create Quiz</button>
+        </form>
+    </div>
+
+
+    <!-- Quiz List -->
+    <div class="card">
+        <h3>All Quiz Sets</h3>
+
+        {% if quizzes %}
+        <table>
+            <tr>
+                <th>No.</th>
+                <th>Title</th>
+                <th>Total Questions</th>
+                <th>Total Marks</th>
+                <th>Total Time</th>
+                <th>Action</th>
+            </tr>
+
+            {% for q in quizzes %}
+            <tr id="row-{{ q.id }}">
+                <td>{{ loop.index }}</td>
+                <td>{{ q.title }}</td>
+                <td>{{ q.total_question }}</td>
+                <td>{{ q.total_marks }}</td>
+                <td>{{ q.total_time }} min</td>
+                <td>
+                    <a class="btn manage" 
+                       href="/question/{{ q.id }}">
+                       Manage
+                    </a>
+
+                    <a class="btn edit" 
+                       href="/edit_quiz/{{ q.id }}">
+                       Edit
+                    </a>
+
+                    <span class="btn delete" 
+                          onclick="deleteQuiz({{ q.id }})">
+                          Delete
+                    </span>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+            <p class="empty">No Quiz Created Yet.</p>
+        {% endif %}
+
+    </div>
+
+</div>
+
+<script>
+function deleteQuiz(id){
+
+    if(confirm("Are you sure to delete this quiz?")){
+
+        fetch("/delete_quiz/" + id, {
+            method: "DELETE"
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.success){
+                document.getElementById("row-"+id).remove();
+            }
+        });
+
+    }
+}
+</script>
+
+</body>
+</html>

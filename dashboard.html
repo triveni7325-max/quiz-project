@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <style>
+        body{
+            margin:0;
+            font-family: Arial;
+            background:#f4f6f9;
+        }
+
+        .navbar{
+            background:#1d3557;
+            padding:15px;
+            color:white;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+
+        .navbar a{
+            color:white;
+            text-decoration:none;
+            margin-left:20px;
+            font-weight:bold;
+        }
+
+        .container{
+            padding:40px;
+        }
+
+        .card{
+            background:white;
+            padding:30px;
+            margin:20px 0;
+            border-radius:10px;
+            box-shadow:0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .card h3{
+            margin-top:0;
+        }
+
+        .btn{
+            display:inline-block;
+            padding:10px 20px;
+            background:#1d3557;
+            color:white;
+            text-decoration:none;
+            border-radius:5px;
+            margin-top:10px;
+        }
+
+        .btn:hover{
+            background:#457b9d;
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <div>
+        Welcome, {{ session['admin'] }}
+    </div>
+
+    <div>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/category">Category</a>
+        <a href="/quiz">Quiz</a>
+        <a href="/logout">Logout</a>
+    </div>
+</div>
+
+<div class="container">
+
+    <div class="card">
+        <h3>Manage Categories</h3>
+        <p>Create, Edit and Delete Quiz Categories.</p>
+        <a href="/category" class="btn">Go to Category</a>
+    </div>
+
+    <div class="card">
+        <h3>Manage Quiz</h3>
+        <p>Create quiz sets under each category.</p>
+        <a href="/quiz" class="btn">Go to Quiz</a>
+    </div>
+
+</div>
+
+</body>
+</html>

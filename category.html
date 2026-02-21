@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Category</title>
+    <style>
+        body{font-family:Arial;background:#f4f6f9;margin:0}
+        .container{padding:40px}
+        input,textarea{
+            width:100%;
+            padding:8px;
+            margin:5px 0;
+        }
+        button{
+            padding:8px 15px;
+            background:#1d3557;
+            color:white;
+            border:none;
+        }
+        table{
+            width:100%;
+            margin-top:20px;
+            border-collapse:collapse;
+        }
+        table,th,td{
+            border:1px solid #ccc;
+            padding:10px;
+        }
+        a{
+            text-decoration:none;
+            color:#1d3557;
+            font-weight:bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+<h2>Create Category</h2>
+
+<form method="post">
+    <input type="text" name="name" placeholder="Category Name" required>
+    <textarea name="description" placeholder="Description"></textarea>
+    <button type="submit">Add Category</button>
+</form>
+
+<h2>All Categories</h2>
+
+<table>
+<tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Quiz</th>
+</tr>
+
+{% for cat in categories %}
+<tr>
+    <td>{{ cat.id }}</td>
+    <td>{{ cat.name }}</td>
+    <td>{{ cat.description }}</td>
+    <td>
+        <a href="/quiz/{{ cat.id }}">Manage Quiz</a>
+    </td>
+</tr>
+{% endfor %}
+
+</table>
+
+</div>
+
+</body>
+</html>

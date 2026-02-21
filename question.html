@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Question Management</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="navbar">
+    <div>Question Management</div>
+    <div>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/logout">Logout</a>
+    </div>
+</div>
+
+<div class="container">
+
+    <!-- Stats -->
+    <div class="card stats">
+        <h3>Total Questions: {{ total_questions }}</h3>
+        <h3>Total Marks: {{ total_marks }}</h3>
+    </div>
+
+    <!-- Add Question -->
+    <div class="card">
+        <h3>Add Question</h3>
+        <form method="post">
+            <textarea name="question" placeholder="Enter Question" required></textarea><br>
+
+            <input type="text" name="option1" placeholder="Option 1" required>
+            <input type="text" name="option2" placeholder="Option 2" required>
+            <input type="text" name="option3" placeholder="Option 3" required>
+            <input type="text" name="option4" placeholder="Option 4" required>
+
+            <select name="correct_option" required>
+                <option value="">Select Correct Option</option>
+                <option value="1">Option 1</option>
+                <option value="2">Option 2</option>
+                <option value="3">Option 3</option>
+                <option value="4">Option 4</option>
+            </select>
+
+            <input type="number" name="marks" value="1" required>
+
+            <button type="submit">Add Question</button>
+        </form>
+    </div>
+
+    <!-- Question Table -->
+    <div class="card">
+        <h3>All Questions</h3>
+
+        <table>
+            <tr>
+                <th>No.</th>
+                <th>Question</th>
+                <th>Correct Answer</th>
+                <th>Marks</th>
+                <th>Action</th>
+            </tr>
+
+            {% for q in questions %}
+            <tr id="row-{{ q[0] }}">
+                <td>{{ loop.index }}</td>
+                <td>{{ q[2] }}</td>
+
+                <td style="color:green;font-weight:bold;">
+                    {% if q[7] == 1 %} {{ q[3] }}
+                    {% elif q[7] == 2 %} {{ q[4] }}
+                    {% elif q[7] == 3 %} {{ q[5] }}
+                    {% elif q[7] == 4 %} {{ q[6] }}
+                    {% endif %}
+                </td>
+
+                <td>{{ q[8] }}</td>
+
+                <td>
+                    <a href="/edit_question/{{ q[0] }}">Edit</a> |
+                    <a href="#" onclick="deleteQuestion({{ q[0] }})" class="delete">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+</div>
+
+<script>
+function deleteQuestion(id){
+    if(confirm("Are you sure?")){
+        fetch("/delete_question/" + id, {
+            method: "DELETE"
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.success){
+                document.getElementById("row-"+id).remove();
+            }
+        });
+    }
+}
+</script>
+
+</body>
+</html>
